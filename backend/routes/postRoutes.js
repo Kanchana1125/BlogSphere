@@ -1,20 +1,10 @@
-const express = require("express");
-
-const router = express.Router();
-
-const {
-  createPost,
-  getPosts,
-  likePost,
-  addComment,
-} = require("../controllers/postController");
-
-router.post("/create", createPost);
-
-router.get("/", getPosts);
-
-router.put("/like/:id", likePost);
-
-router.post("/comment/:id", addComment);
-
+const router = require("express").Router();
+const posts = require("../controllers/postController");
+const protect = require("../middleware/authMiddleware");
+router.get("/", posts.listPosts);
+router.get("/:id", posts.getPost);
+router.post("/", protect, posts.createPost);
+router.put("/:id", protect, posts.updatePost);
+router.delete("/:id", protect, posts.deletePost);
+router.post("/:id/like", protect, posts.toggleLike);
 module.exports = router;
